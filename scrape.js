@@ -41,20 +41,20 @@ global.fetch ??= (...args) =>
     return;
   }
 
-  const extract = k =>
-    j.boxscore.teams.reduce((sum, t) => {
-      const m = t.statistics.find(s => s.name === k);
-      return sum + (m ? +m.value : 0);
-    }, 0);
+  const extract = key =>
+  j.boxscore.teams.reduce((sum, t) => {
+    const m = (t.statistics || []).find(s => s.name === key);
+    return sum + (m?.value ? Number(m.value) : 0);
+  }, 0);
 
-  const out = {
-    FGA: extract('FGA'),
-    FTA: extract('FTA'),
-    TOV: extract('TO'),
-    ORB: extract('OREB'),
-    PTS: extract('PTS'),
-    ts: new Date().toISOString()
-  };
+const out = {
+  FGA: extract('fgAtt'),
+  FTA: extract('freeThrowAtt'),
+  TOV: extract('turnovers'),
+  ORB: extract('offReb'),
+  PTS: extract('points'),
+  ts: new Date().toISOString()
+};
 
   fs.mkdirSync('live', { recursive: true });
   fs.writeFileSync('live/box.json', JSON.stringify(out, null, 2));
