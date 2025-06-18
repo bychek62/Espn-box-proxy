@@ -1,27 +1,22 @@
 name: scrape-boxscore
 
-# 1) Запуск вручную (кнопка "Run workflow")
-# 2) Автоматически каждую минуту
 on:
-  workflow_dispatch:
+  workflow_dispatch:      # запуск вручную по кнопке
   schedule:
-    - cron: '*/1 * * * *'
+    - cron:  '*/1 * * * *' # и автоматом каждую минуту
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # Скачиваем содержимое репозитория
-      - uses: actions/setup-node@v4
-  with:
-    node-version: '20'
-    - run: npm install node-fetch@2
-- run: node -v
-# Запускаем наш скрипт, который тянет данные с ESPN
-      - run: node scrape.js
+      - uses: actions/checkout@v4
 
-      # Добавляем/обновляем файл live/box.json и делаем коммит
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'             # ← важно! v20 поддерживает fetch без пакетов
+
+      - run: node scrape.js              # запускаем наш скрипт
+
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'live/box.json'
