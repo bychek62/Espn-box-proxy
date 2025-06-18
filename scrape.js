@@ -40,7 +40,7 @@ global.fetch ??= (...args) =>
     console.log('⚠️ Нет блока boxscore.teams — выходим без ошибки');
     return;
   }
-
+  console.log(JSON.stringify(j.boxscore.teams, null, 2));
   const extract = key =>
   j.boxscore.teams.reduce((sum, t) => {
     const m = (t.statistics || []).find(s => s.name === key);
