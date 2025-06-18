@@ -3,8 +3,7 @@ name: scrape-boxscore
 on:
   workflow_dispatch:      # запуск вручную по кнопке
   schedule:
-    - cron:  '*/1 * * * *' # и автоматом каждую минуту
-
+  - cron: '*/1 * * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
