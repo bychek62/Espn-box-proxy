@@ -36,6 +36,7 @@ global.fetch ??= (...args) =>
   }
 
   const j = await res.json();
+  console.log('📦 j.boxscore.teams =', JSON.stringify(j.boxscore?.teams, null, 2));
   if (!j.boxscore || !j.boxscore.teams) {
     console.log('⚠️ Нет блока boxscore.teams — выходим без ошибки');
     return;
