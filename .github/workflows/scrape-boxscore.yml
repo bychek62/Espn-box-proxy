@@ -1,11 +1,15 @@
 name: scrape-boxscore
-on: workflow_dispatch
+
+on:
+  workflow_dispatch:
 
 jobs:
-  fetch:
+  fetch-boxscore:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Run scrape.js
         run: node scrape.js
@@ -13,7 +17,7 @@ jobs:
           GAME_ID: ${{ secrets.GAME_ID }}
           LEAGUE: ${{ secrets.LEAGUE }}
 
-      - name: Commit box.json (если появился)
+      - name: Commit box.json (если он появился)
         run: |
           if [ -f live/box.json ]; then
             git config user.name "github-actions"
@@ -22,5 +26,5 @@ jobs:
             git commit -m "auto: update box"
             git push
           else
-            echo "box.json нет — матч ещё не отдал статистику"
+            echo "⚠️ box.json не найден — матч ещё не стартовал или ESPN вернул пустоту"
           fi
