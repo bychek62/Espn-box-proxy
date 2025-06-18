@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v4
 
       # Ставим зависимость node-fetch
-      - run: npm install node-fetch@3
+      - run: npm install node-fetch@2
 
       # Запускаем наш скрипт, который тянет данные с ESPN
       - run: node scrape.js
