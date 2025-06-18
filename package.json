@@ -1,0 +1,11 @@
+{
+  "name": "boxscore-fetcher",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Fetch NBA boxscore from ESPN and generate JSON output",
+  "main": "scrape.js",
+  "scripts": {
+    "start": "node scrape.js"
+  },
+  "dependencies": {}
+}
