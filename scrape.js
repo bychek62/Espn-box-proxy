@@ -7,6 +7,10 @@ const url    = `https://site.web.api.espn.com/apis/v2/sports/basketball/${league
 (async () => {
   const j  = await (await fetch(url)).json();
   const t  = j.boxscore.teams;
+  if (!j.boxscore || !j.boxscore.teams) {
+  console.error("ESPN не вернул данные boxscore — возможно, матч ещё не начался или ID неверный.");
+  process.exit(1);
+  }
   const sum = k => t.reduce((s,tm)=>
                 s + Number(tm.statistics.find(x=>x.name===k).value),0);
 
