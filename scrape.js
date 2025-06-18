@@ -15,32 +15,44 @@ global.fetch ??= (...args) =>
   );
 
 (async () => {
-  const id = process.env.GAME_ID;
+  console.log('🔍 GAME_ID из ENV:', process.env.GAME_ID);
+  console.log('🔍 LEAGUE из ENV:', process.env.LEAGUE);
+
+  const id     = process.env.GAME_ID;
   const league = process.env.LEAGUE;
-  if (!id || !league) throw new Error('env не переданы');
 
-  const url = `https://site.web.api.espn.com/apis/v2/sports/basketball/${league}/summary?event=${id}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('ESPN вернул статус ' + res.status);
-
-  const j = await res.json();
-  if (!j.boxscore) {
-    console.log('boxscore ещё пуст — выходим без ошибки');
+  if (!id || !league) {
+    console.error('⛔ GAME_ID или LEAGUE не переданы');
     return;
   }
 
-  const need = k =>
+  const url = `https://site.web.api.espn.com/apis/v2/sports/basketball/${league}/summary?event=${id}`;
+  console.log('📡 GET', url);
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    console.log('⚠️ ESPN вернул статус', res.status, '— boxscore недоступен');
+    return;
+  }
+
+  const j = await res.json();
+  if (!j.boxscore || !j.boxscore.teams) {
+    console.log('⚠️ Нет блока boxscore.teams — выходим без ошибки');
+    return;
+  }
+
+  const extract = k =>
     j.boxscore.teams.reduce((sum, t) => {
       const m = t.statistics.find(s => s.name === k);
-      return sum + (m ? Number(m.value) : 0);
+      return sum + (m ? +m.value : 0);
     }, 0);
 
   const out = {
-    FGA: need('FGA'),
-    FTA: need('FTA'),
-    TOV: need('TO'),
-    ORB: need('OREB'),
-    PTS: need('PTS'),
+    FGA: extract('FGA'),
+    FTA: extract('FTA'),
+    TOV: extract('TO'),
+    ORB: extract('OREB'),
+    PTS: extract('PTS'),
     ts: new Date().toISOString()
   };
 
