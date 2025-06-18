@@ -25,12 +25,14 @@ jobs:
           GAME_ID: ${{ secrets.GAME_ID }}
           LEAGUE: ${{ secrets.LEAGUE }}
 
-      - name: Commit box.json if exists
-        if: ${{ exists('live/box.json') }}
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: 'live/box.json'
-          message: 'auto: update box'
-          push: true
-          default_author: github_actions
-          skip_dirty_check: true
+      - name: Commit box.json (if it exists)
+        run: |
+          if [ -f live/box.json ]; then
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git add live/box.json
+            git commit -m "auto: update box"
+            git push
+          else
+            echo "⚠️ box.json не найден — ESPN пока ничего не отдал"
+          fi
