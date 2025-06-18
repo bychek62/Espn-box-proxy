@@ -1,3 +1,7 @@
+
+
+
+
 name: scrape-boxscore
 
 # 1) Запуск вручную (кнопка "Run workflow")
@@ -13,13 +17,10 @@ jobs:
 
     steps:
       # Скачиваем содержимое репозитория
-      - uses: actions/checkout@v4
-
-      # Устанавливаем Node.js
       - uses: actions/setup-node@v4
-
-      # Ставим зависимость node-fetch
-      - run: npm install node-fetch@2
+  with:
+    node-version: '20'
+- run: npm install node-fetch@2
 
       # Запускаем наш скрипт, который тянет данные с ESPN
       - run: node scrape.js
