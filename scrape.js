@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-const league = process.env.LEAGUE  || 'nba';
-const id     = process.env.GAME_ID || '401661615';
+const id     = process.env.GAME_ID;
+const league = process.env.LEAGUE;
 
 const url = `https://site.web.api.espn.com/apis/v2/sports/basketball/${league}/summary?event=${id}`;
 
