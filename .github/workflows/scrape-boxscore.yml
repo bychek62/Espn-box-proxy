@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Run scrape.js
@@ -17,14 +17,14 @@ jobs:
           GAME_ID: ${{ secrets.GAME_ID }}
           LEAGUE: ${{ secrets.LEAGUE }}
 
-      - name: Commit box.json (если он появился)
+      - name: Commit box.json (если появился)
         run: |
           if [ -f live/box.json ]; then
             git config user.name "github-actions"
             git config user.email "github-actions@github.com"
             git add live/box.json
-            git commit -m "auto: update box"
-            git push
+            git commit -m "auto: update box" || true
+            git push || true
           else
-            echo "⚠️ box.json не найден — матч ещё не стартовал или ESPN вернул пустоту"
+            echo "⚠️ box.json не найден — матч не отдал данные или ESPN молчит"
           fi
